@@ -651,13 +651,13 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
             Variable = sprintf("%s%s", n, c("", ", M (SD)")[multi+1]),
             Res = sprintf("%0.2f (%0.2f)", mean(d[[n]], na.rm=TRUE), sd(d[[n]], na.rm=TRUE)))
         } else {
-          data.table(
-            Variable = sprintf("%s%s", n, c("", ", Mdn (IQR)")[multi+1]),
-            Res = sprintf("%0.2f (%0.2f)", median(d[[n]], na.rm=TRUE),
-                          abs(diff(quantile(d[[n]], c(.25, .75), na.rm = TRUE)))))
+            data.table(Variable = sprintf("%s%s", n, c("",
+                    ", Mdn (IQR)")[multi + 1]), Res = sprintf("%0.2f (%0.2f - %0.2f)",
+                    median(d[[n]], na.rm = TRUE), quantile(d[[n]],
+                    c(0.25), na.rm = TRUE), quantile(d[[n]],
+                    c(0.75), na.rm = TRUE)))
         }
       })
-
       names(tmpcont) <- vnames[contvars.index]
       tmpres <- c(tmpres, tmpcont)
 
