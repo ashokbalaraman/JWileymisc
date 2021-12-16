@@ -641,7 +641,7 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
     d <- dat[which(g == gd)]
     tmpres <- NULL
     reslab <- ""
-
+    # Modified by Maya & Ashok on 11/10/2021 to customize Quartile calculation
     if (isTRUE(length(contvars.index) > 0)) {
       tmpcont <- lapply(contvars.index, function(v) {
         n <- vnames[v]
@@ -751,13 +751,13 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
 
             }
           } else {
+            # Modified by Maya & Ashok on 12/15/2021
             if (isFALSE(paired)) {
-            tests <- kruskal.test(dv ~ g, data = data.frame(dv = dat[[v]], g = g))
-            out <- cbind(out,
-                         Test = c(sprintf("KW chi-square = %0.2f, df = %d, %s",
-                                          tests$statistic, tests$parameter,
-                                          formatPval(tests$p.value, 3, 3, includeP=TRUE)),
-                                  rep("", nrow(out) - 1)))
+              tests <- mood.test(dv ~ g, data = data.frame(dv = dat[[v]]))
+              out <- cbind(out, Test = c(sprintf("Mood two-sample test of scale = %0.2f, %s", 
+                tests$statistic, formatPval(tests$p.value, 
+                  3, 3, includeP = TRUE)), rep("", nrow(out) - 
+                1)))
             } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
               ## non parametric paired wilcoxon test
               widedat <- copy(reshape(data.table(
