@@ -752,9 +752,10 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
             }
           } else {
             # Modified by Maya & Ashok on 12/15/2021
-            if (isFALSE(paired)) {
-              tests <- mood.test(dv ~ g, data = data.frame(dv = dat[[v]]))
-              out <- cbind(out, Test = c(sprintf("Mood two-sample test of scale = %0.2f, %s", 
+           if (isFALSE(paired)) {
+              library("RVAideMemoire")
+              tests <- mood.medtest(dv ~ g, data = data.frame(dv = dat[[v]]))
+              out <- cbind(out, Test = c(sprintf("Mood's Median Test = %0.2f, %s", 
                 tests$statistic, formatPval(tests$p.value, 
                   3, 3, includeP = TRUE)), rep("", nrow(out) - 
                 1)))
